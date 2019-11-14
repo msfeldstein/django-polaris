@@ -6,13 +6,13 @@ with open("README.md") as f:
 
 setup(
     name="django-polaris",
-    version=1.0,
-    description="A SEP-24-compliant django anchor server",
+    version=0.9,
+    description="A SEP-24-compliant Django anchor server",
     long_description=long_description,
     url="https://github.com/stellar/django-polaris",
     author="Jake Urban",
     author_email="jake@stellar.org",
-    license="Apache License",
+    license="Apache license 2.0",
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Django",
@@ -23,6 +23,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.7",
     ],
+    keywords=["stellar", "sdf", "anchor", "server", "polaris", "sep-24", "sep24"],
     include_package_data=True,
     package_dir={"": "polaris"},
     packages=find_packages("polaris"),
