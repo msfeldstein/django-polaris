@@ -1,4 +1,6 @@
 """This module defines custom management commands for the app admin."""
+import logging
+
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.timezone import now
 from stellar_sdk.exceptions import NotFoundError
@@ -8,6 +10,8 @@ from stellar_sdk.xdr import Xdr
 from polaris import settings
 from polaris.helpers import format_memo_horizon
 from polaris.models import Transaction
+
+logger = logging.getLogger(__file__)
 
 
 def stream_transactions():
@@ -103,7 +107,7 @@ class Command(BaseCommand):
             for withdrawal_transaction in pending_withdrawal_transactions:
                 if process_withdrawal(response, withdrawal_transaction):
                     envelope_xdr = response["envelope_xdr"]
-                    print(
+                    logger.info(
                         f"successfully processed withdrawal for response with xdr {envelope_xdr}"
                     )
                     break

@@ -322,7 +322,7 @@ def test_deposit_confirm_external_id(
             status_code=400,
             headers={},
             url="",
-            text=json.dumps(dict(status=400, result_xdr=TRUSTLINE_FAILURE_XDR)),
+            text=json.dumps(dict(status=400, extras=dict(result_xdr=TRUSTLINE_FAILURE_XDR))),
         )
     ),
 )
@@ -490,7 +490,6 @@ def test_deposit_check_trustlines_horizon(
     deposit is created synchronously. This makes Horizon calls, so it is skipped by the CI.
     """
     # Initiate a transaction with a new Stellar account.
-    print("Creating initial deposit.")
     deposit = acc1_usd_deposit_transaction_factory()
 
     keypair = Keypair.random()
@@ -504,7 +503,6 @@ def test_deposit_check_trustlines_horizon(
 
     # Complete the interactive deposit. The transaction should be set
     # to pending_user_transfer_start, since wallet-side confirmation has not happened.
-    print("Completing interactive deposit.")
     transaction_id = content["id"]
     url = content["url"]
     amount = 20
@@ -533,9 +531,6 @@ def test_deposit_check_trustlines_horizon(
 
     # The Stellar account has not been registered, so
     # this should not change the status of the Transaction.
-    print(
-        "Check trustlines, try one. No trustline for account. Status should be pending_trust."
-    )
     call_command("check_trustlines")
     assert (
         Transaction.objects.get(id=transaction_id).status
@@ -547,7 +542,6 @@ def test_deposit_check_trustlines_horizon(
     from stellar_sdk.asset import Asset
     from stellar_sdk.transaction_builder import TransactionBuilder
 
-    print("Create trustline.")
     asset_code = deposit.asset.code
     asset_issuer = settings.STELLAR_DISTRIBUTION_ACCOUNT_ADDRESS
     Asset(code=asset_code, issuer=asset_issuer)
@@ -562,7 +556,6 @@ def test_deposit_check_trustlines_horizon(
     response = server.submit_transaction(transaction)
     assert response["result_xdr"] == "AAAAAAAAAGQAAAAAAAAAAQAAAAAAAAAGAAAAAAAAAAA="
 
-    print("Check trustlines, try three. Status should be completed.")
     call_command("check_trustlines")
     completed_transaction = Transaction.objects.get(id=transaction_id)
     assert completed_transaction.status == Transaction.STATUS.completed

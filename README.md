@@ -42,3 +42,21 @@ As an anchor, you need setup your stellar accounts for asset issuance and distri
 1. Set `STELLAR_ISSUER_ACCOUNT_ADDRESS` to the value of `Public Key` that you just funded.
 1. Now, run [this script](https://github.com/msfeldstein/create-stellar-token), using the issuer seed and distribution seed of the accounts just created. You can decide the name of your asset and amount to issue. This will issue an asset and send some amount of that asset to the distribution account.
 1. Finally, modify the `SERVER_JWT_KEY` to a more secure phrase for more secure SEP-10 authentication. 
+
+## Contributing and Testing
+To set up the development environment:
+```
+pip install pipenv
+git clone https://github.com/stellar/django-polaris.git
+cd django-polaris
+pipenv install --dev
+```
+To test:
+```.env
+pipenv run python polaris/manage.py collectstatic --no-input
+pipenv run pytest
+```
+Note: `collectstatic` removes some files and generates others. Make sure these changes don't make it into your PR. You can remove the files generated using:
+```
+pipenv run python polaris/manage.py collectstatic --clear
+```
